@@ -1,9 +1,18 @@
 package com.example.practiceSpringBoot.service;
 
-import org.springframework.stereotype.Service;
+import com.example.practiceSpringBoot.entity.User;
 
-@Service
-public class UserService {
+import java.util.List;
+import java.util.Optional;
 
+public interface UserService {
+    User addUser(User user);
 
+    List<User> getAllUsers();
+
+    Optional<User> getUserById(int userId);
+
+    User updateUser(int userId, User user);
+
+    String deleteUser(int userId);
 }

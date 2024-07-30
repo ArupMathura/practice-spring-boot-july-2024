@@ -21,4 +21,9 @@ public class User {
     private String lastName;
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Override
+    public String toString() {
+        return "User{id='" + id + "', firstName='" + firstName + "', lastName='" + lastName + "', email='" + email + "'}";
+    }
 }
