@@ -19,6 +19,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
+        if (user.getId() != null && userRepository.existsById(user.getId())) {
+            throw new RuntimeException("User with ID " + user.getId() + " already exists.");
+        }
         return userRepository.save(user);
     }
 
@@ -51,12 +54,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUser(int userId) {
+    public void deleteUser(int userId) {
         Optional<User> existingUser = userRepository.findById(userId);
 
         if (existingUser.isPresent()) {
             userRepository.deleteById(userId);
-            return "User with Id " + userId + " deleted successfully.";
         }
         else {
             throw new RuntimeException("User with ID " + userId + " not found.");

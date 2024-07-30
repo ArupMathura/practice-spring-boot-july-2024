@@ -4,6 +4,8 @@ import com.example.practiceSpringBoot.entity.User;
 import com.example.practiceSpringBoot.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +19,32 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User addUser(@RequestBody User user) {
-        return userService.addUser(user);
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        User savedUser = userService.addUser(user);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> userList = userService.getAllUsers();
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable int id) {
-        return userService.getUserById(id).orElseThrow(() -> new RuntimeException("user with this id " + id + " not found"));
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        User user = userService.getUserById(id).orElseThrow(() -> new RuntimeException("user with this id " + id + " not found"));
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable("id") int userId, @RequestBody User user) {
-        return userService.updateUser(userId, user);
+    public ResponseEntity<User> updateUser(@PathVariable("id") int userId, @RequestBody User user) {
+        User updatedUser = userService.updateUser(userId, user);
+        return new ResponseEntity<>(updatedUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") int userId) {
-        return userService.deleteUser(userId);
+    public ResponseEntity<String> deleteUser(@PathVariable("id") int userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity<>("User with Id " + userId + " deleted successfully.", HttpStatus.OK);
     }
 }
