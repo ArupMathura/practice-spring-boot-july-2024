@@ -3,10 +3,8 @@ package com.example.practiceSpringBoot.controller;
 import com.example.practiceSpringBoot.entity.User;
 import com.example.practiceSpringBoot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +23,30 @@ public class UserController {
     @GetMapping("/{userId}")
     public User getUserById(@PathVariable int userId) {
         return userService.getUserById(userId);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public String addUser(@RequestBody User user) {
+        return userService.addUser(user);
+    }
+
+    @PutMapping("/{userId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User updateUser(@PathVariable int userId, @RequestBody User user) {
+        return userService.updateUser(userId, user);
+    }
+
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteUser(@PathVariable int userId) {
+        return userService.deleteUser(userId);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleRuntimeException(RuntimeException ex) {
+        return ex.getMessage();
     }
 
 }
