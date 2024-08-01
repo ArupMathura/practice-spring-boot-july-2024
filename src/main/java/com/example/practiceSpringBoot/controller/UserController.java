@@ -1,5 +1,6 @@
 package com.example.practiceSpringBoot.controller;
 
+import com.example.practiceSpringBoot.dto.UserDTO;
 import com.example.practiceSpringBoot.entity.User;
 import com.example.practiceSpringBoot.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,26 +20,27 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
-        User savedUser = userService.addUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDto) {
+        UserDTO savedUserDto = userService.addUser(userDto);
+//        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> userList = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> userList = userService.getAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable int id) {
-        User user = userService.getUserById(id).orElseThrow(() -> new RuntimeException("user with this id " + id + " not found"));
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
+        UserDTO userDTO = userService.getUserById(id);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") int userId, @RequestBody User user) {
-        User updatedUser = userService.updateUser(userId, user);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") int userId, @RequestBody UserDTO userDTO) {
+        UserDTO updatedUser = userService.updateUser(userId, userDTO);
         return new ResponseEntity<>(updatedUser, HttpStatus.CREATED);
     }
 

@@ -1,18 +1,19 @@
 package com.example.practiceSpringBoot.service;
 
+import com.example.practiceSpringBoot.dto.UserDTO;
 import com.example.practiceSpringBoot.entity.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    User addUser(User user);
+    UserDTO addUser(UserDTO userDto);
 
-    List<User> getAllUsers();
+    List<UserDTO> getAllUsers();
 
-    Optional<User> getUserById(int userId);
+    UserDTO getUserById(int userId);
 
-    User updateUser(int userId, User user);
+    UserDTO updateUser(int userId, UserDTO userDTO);
 
     void deleteUser(int userId);
 }
