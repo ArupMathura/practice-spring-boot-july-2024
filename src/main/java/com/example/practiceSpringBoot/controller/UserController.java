@@ -4,6 +4,7 @@ import com.example.practiceSpringBoot.dto.UserDTO;
 import com.example.practiceSpringBoot.entity.User;
 import com.example.practiceSpringBoot.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDto) {
+    public ResponseEntity<UserDTO> addUser(@Valid @RequestBody UserDTO userDto) {
         UserDTO savedUserDto = userService.addUser(userDto);
 //        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDto);
@@ -39,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") int userId, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable("id") int userId, @Valid @RequestBody UserDTO userDTO) {
         UserDTO updatedUser = userService.updateUser(userId, userDTO);
         return new ResponseEntity<>(updatedUser, HttpStatus.CREATED);
     }
