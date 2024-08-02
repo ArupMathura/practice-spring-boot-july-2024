@@ -13,13 +13,13 @@ import lombok.*;
 public class UserDTO {
     private Integer id;
 
-    @NotBlank(message = "First name cannot be blank")
+    @NotBlank(message = "User First name should not be blank or null")
     private String firstName;
 
-    @NotBlank(message = "Last name cannot be blank")
+    @NotBlank(message = "User Last name should not be blank or null")
     private String lastName;
 
-    @NotBlank(message = "Email cannot be blank")
+    @NotBlank(message = "User Email should not be blank or null")
     @Email(message = "Email should be valid")
     private String email;
 
