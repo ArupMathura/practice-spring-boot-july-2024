@@ -23,4 +23,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorDetails> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception, WebRequest webRequest) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                webRequest.getDescription(false),
+                "USER_EMAIL_ALREADY_EXIST"
+        );
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 }

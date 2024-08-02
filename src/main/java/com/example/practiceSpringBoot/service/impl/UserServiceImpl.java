@@ -2,6 +2,7 @@ package com.example.practiceSpringBoot.service.impl;
 
 import com.example.practiceSpringBoot.dto.UserDTO;
 import com.example.practiceSpringBoot.entity.User;
+import com.example.practiceSpringBoot.exception.EmailAlreadyExistsException;
 import com.example.practiceSpringBoot.exception.ResourceNotFoundException;
 import com.example.practiceSpringBoot.mapper.UserMapper;
 import com.example.practiceSpringBoot.repository.UserRepository;
@@ -26,9 +27,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO addUser(UserDTO userDTO) {
-        /*if (user.getId() != null && userRepository.existsById(user.getId())) {
-            throw new RuntimeException("User with ID " + user.getId() + " already exists.");
-        }*/
+
+        Optional<User> optionalUser = userRepository.findByEmail(userDTO.getEmail());
+
+        if (optionalUser.isPresent()) {
+            throw new EmailAlreadyExistsException("This Email already exist");
+        }
 
         // convert UserDto to User JPA entity
 //        User user = UserMapper.dtoToEntity(dto);
