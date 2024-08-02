@@ -2,6 +2,7 @@ package com.example.practiceSpringBoot.service.impl;
 
 import com.example.practiceSpringBoot.dto.UserDTO;
 import com.example.practiceSpringBoot.entity.User;
+import com.example.practiceSpringBoot.exception.ResourceNotFoundException;
 import com.example.practiceSpringBoot.mapper.UserMapper;
 import com.example.practiceSpringBoot.repository.UserRepository;
 import com.example.practiceSpringBoot.service.UserService;
@@ -59,7 +60,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> {
-                    throw new RuntimeException("User with ID " + userId + " not found.");
+                    throw new ResourceNotFoundException("User", "id", userId);
                 });
 //        UserDTO userDTO = UserMapper.entityToDto(user);
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
@@ -68,34 +69,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(int userId, UserDTO userDTO) {
-        Optional<User> existingUser = userRepository.findById(userId);
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw new ResourceNotFoundException("User", "id", userId);
+                });
 
-        if (existingUser.isPresent()) {
-            User updatedUser = existingUser.get();
-            log.info("Existing User Data: {}", updatedUser);
-            updatedUser.setFirstName(userDTO.getFirstName());
-            updatedUser.setLastName(userDTO.getLastName());
-            updatedUser.setEmail(userDTO.getEmail());
-            log.info("Updated User Data: {}", updatedUser);
-            User savedUpdatedUser = userRepository.save(updatedUser);
+        log.info("Existing User Data: {}", existingUser);
+        existingUser.setFirstName(userDTO.getFirstName());
+        existingUser.setLastName(userDTO.getLastName());
+        existingUser.setEmail(userDTO.getEmail());
+        log.info("Updated User Data: {}", existingUser);
+        User savedUpdatedUser = userRepository.save(existingUser);
 //            return UserMapper.entityToDto(savedUpdatedUser);
-            return modelMapper.map(savedUpdatedUser, UserDTO.class);
-        }
-        else {
-            throw new RuntimeException("User with ID " + userId + " not found.");
-        }
+        return modelMapper.map(savedUpdatedUser, UserDTO.class);
+
     }
 
     @Override
     public void deleteUser(int userId) {
-        Optional<User> existingUser = userRepository.findById(userId);
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    throw new ResourceNotFoundException("User", "id", userId);
+                });
 
-        if (existingUser.isPresent()) {
-            userRepository.deleteById(userId);
-        }
-        else {
-            throw new RuntimeException("User with ID " + userId + " not found.");
-        }
+        userRepository.deleteById(userId);
+
     }
 
 
